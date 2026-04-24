@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Create Account{% endblock %}
+
+{% block content %}
+<div class="auth-container">
+    <h2 class="text-center mb-4 font-weight-bold" style="color: #f8fafc;">Create Account</h2>
+    <p class="text-center text-muted mb-4">Join CV Generator today</p>
+    <form method="post">
+        {% csrf_token %}
+        {{ form|crispy }}
+        <div class="d-grid mt-4">
+            <button type="submit" class="btn btn-primary btn-lg">Register</button>
+        </div>
+    </form>
+    <div class="text-center mt-4 pt-3" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
+        <p class="text-muted mb-0">Already have an account? <a href="{% url 'login' %}" style="color: #8b5cf6; text-decoration: none;">Sign in</a></p>
+    </div>
+</div>
+{% endblock %}
