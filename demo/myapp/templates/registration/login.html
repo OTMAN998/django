@@ -14,6 +14,9 @@
             <button type="submit" class="btn btn-primary btn-lg">Sign In</button>
         </div>
     </form>
+    <div class="text-center mt-3">
+        <a href="{% url 'password_reset' %}" class="text-muted text-decoration-none" style="font-size: 0.95rem;">Forgot your password?</a>
+    </div>
     <div class="text-center mt-4 pt-3" style="border-top: 1px solid rgba(255, 255, 255, 0.1);">
         <p class="text-muted mb-0">Don't have an account? <a href="{% url 'register' %}" style="color: #8b5cf6; text-decoration: none;">Register here</a></p>
     </div>

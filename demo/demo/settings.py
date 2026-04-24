@@ -133,3 +133,4 @@ DEFAULT_FROM_EMAIL = 'CV Generator <badrelqadmirio@gmail.com>'
 
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
+LOGIN_URL = 'login'
