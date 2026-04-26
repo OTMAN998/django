@@ -45,6 +45,15 @@ def cv_edit(request, pk):
         form = CVProfileForm(instance=cv)
     return render(request, 'cv/cv_form.html', {'form': form, 'title': 'Modifier les infos du CV', 'cv': cv})
 
+@login_required
+def cv_delete(request, pk):
+    """Supprimer un profil CV complet."""
+    cv = get_object_or_404(CVProfile, pk=pk, user=request.user)
+    if request.method == 'POST':
+        cv.delete()
+        return redirect('cv_dashboard')
+    return redirect('cv_dashboard')
+
 # ─── Expérience ────────────────────────────────────────────────────────────────
 
 @login_required

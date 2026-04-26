@@ -7,6 +7,7 @@ urlpatterns = [
     path('<int:pk>/', views.cv_detail, name='cv_detail'),
     path('<int:pk>/edit/', views.cv_edit, name='cv_edit'),
     path('<int:pk>/pdf/', views.generate_pdf_cv, name='generate_pdf_cv'),
+    path('<int:pk>/delete/', views.cv_delete, name='cv_delete'),
 
     # Expérience
     path('<int:cv_id>/add-experience/', views.add_experience, name='add_experience'),

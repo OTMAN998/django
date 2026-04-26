@@ -23,7 +23,10 @@
             <p class="text-muted small mb-4">Dernière mise à jour : {{ cv.updated_at|date:"d M Y" }}</p>
             <div class="d-flex justify-content-between mt-auto">
                 <a href="{% url 'cv_detail' cv.pk %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">Éditer</a>
-                <button class="btn btn-outline-danger btn-sm rounded-pill px-3">Supprimer</button>
+                <form method="post" action="{% url 'cv_delete' cv.pk %}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce CV ? Cette action est irréversible.')" class="d-inline">
+                    {% csrf_token %}
+                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">Supprimer</button>
+                </form>
             </div>
         </div>
     </div>
