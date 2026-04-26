@@ -33,7 +33,7 @@
 
         <div class="glass-card mt-4 text-center">
             <h4 class="h5 mb-3">Générer le PDF</h4>
-            <button class="btn btn-success w-100 rounded-pill">Télécharger le CV</button>
+            <a href="{% url 'generate_pdf_cv' cv.pk %}" class="btn btn-success w-100 rounded-pill">Télécharger le CV</a>
         </div>
     </div>
 

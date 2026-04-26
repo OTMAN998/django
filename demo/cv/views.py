@@ -1,5 +1,8 @@
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib.auth.decorators import login_required
+from django.http import HttpResponse
+from django.template.loader import get_template
+from xhtml2pdf import pisa
 from .models import CVProfile, Experience, Education, Skill, Language
 from .forms import CVProfileForm, ExperienceForm, EducationForm, SkillForm, LanguageForm
 
@@ -189,3 +192,27 @@ def delete_language(request, pk):
     if request.method == 'POST':
         language.delete()
     return redirect('cv_detail', pk=cv_pk)
+
+@login_required
+def generate_pdf_cv(request, pk):
+    """Génère un PDF du CV à partir d'un template HTML."""
+    cv = get_object_or_404(CVProfile, pk=pk, user=request.user)
+    template_path = 'cv/cv_pdf.html'
+    context = {'cv': cv}
+    
+    # Créer l'objet de réponse Django avec le type de contenu PDF
+    response = HttpResponse(content_type='application/pdf')
+    response['Content-Disposition'] = f'attachment; filename="cv_{cv.user.username}.pdf"'
+    
+    # Trouver le template et le rendre en HTML
+    template = get_template(template_path)
+    html = template.render(context)
+
+    # Créer le PDF
+    pisa_status = pisa.CreatePDF(html, dest=response)
+    
+    # En cas d'erreur
+    if pisa_status.err:
+       return HttpResponse('Une erreur est survenue lors de la génération du PDF <pre>' + html + '</pre>')
+    
+    return response

@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>CV - {{ cv.titre_poste }}</title>
+    <style>
+        @page {
+            size: a4 portrait;
+            margin: 1cm;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            font-size: 11pt;
+            color: #333;
+            line-height: 1.4;
+        }
+        .header {
+            border-bottom: 2pt solid #4facfe;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+        }
+        .name {
+            font-size: 24pt;
+            font-weight: bold;
+            color: #2c3e50;
+        }
+        .title {
+            font-size: 16pt;
+            color: #4facfe;
+            margin-top: 5px;
+        }
+        .contact-info {
+            font-size: 10pt;
+            color: #666;
+            margin-top: 10px;
+        }
+        .section {
+            margin-bottom: 20px;
+        }
+        .section-title {
+            font-size: 14pt;
+            font-weight: bold;
+            color: #2c3e50;
+            background-color: #f8f9fa;
+            padding: 5px;
+            border-left: 4pt solid #4facfe;
+            margin-bottom: 10px;
+            text-transform: uppercase;
+        }
+        .item {
+            margin-bottom: 10px;
+        }
+        .item-header {
+            font-weight: bold;
+            display: block;
+        }
+        .item-sub {
+            font-style: italic;
+            color: #666;
+            font-size: 10pt;
+        }
+        .description {
+            margin-top: 5px;
+            font-size: 10pt;
+            text-align: justify;
+        }
+        .skills-table {
+            width: 100%;
+        }
+        .skill-item {
+            padding: 2px 0;
+        }
+        .skill-bar-bg {
+            background-color: #e9ecef;
+            height: 8px;
+            width: 100px;
+            display: inline-block;
+        }
+        .skill-bar-fill {
+            background-color: #4facfe;
+            height: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="header">
+        <div class="name">{{ cv.user.get_full_name|default:cv.user.username }}</div>
+        <div class="title">{{ cv.titre_poste }}</div>
+        <div class="contact-info">
+            {{ cv.user.email }} | {{ cv.adresse|default:"" }}
+            {% if cv.linkedin %} | {{ cv.linkedin }}{% endif %}
+        </div>
+    </div>
+
+    {% if cv.experiences.all %}
+    <div class="section">
+        <div class="section-title">Expériences Professionnelles</div>
+        {% for exp in cv.experiences.all %}
+        <div class="item">
+            <div class="item-header">{{ exp.poste }} chez {{ exp.entreprise }}</div>
+            <div class="item-sub">
+                {{ exp.date_debut|date:"M Y" }} - 
+                {% if exp.date_fin %}{{ exp.date_fin|date:"M Y" }}{% else %}Présent{% endif %}
+            </div>
+            <div class="description">{{ exp.description }}</div>
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    {% if cv.educations.all %}
+    <div class="section">
+        <div class="section-title">Formations</div>
+        {% for edu in cv.educations.all %}
+        <div class="item">
+            <div class="item-header">{{ edu.diplome }}</div>
+            <div class="item-sub">{{ edu.etablissement }} | {{ edu.annee }}</div>
+            {% if edu.mention %}
+            <div class="description">Mention : {{ edu.mention }}</div>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+    <table width="100%">
+        <tr>
+            <td width="50%" valign="top">
+                {% if cv.skills.all %}
+                <div class="section">
+                    <div class="section-title">Compétences</div>
+                    {% for skill in cv.skills.all %}
+                    <div class="skill-item">
+                        <span style="font-size: 10pt;">{{ skill.nom }}</span>
+                        <br>
+                        <div class="skill-bar-bg">
+                            <div class="skill-bar-fill" style="width: {{ skill.niveau }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </td>
+            <td width="50%" valign="top">
+                {% if cv.languages.all %}
+                <div class="section">
+                    <div class="section-title">Langues</div>
+                    {% for lang in cv.languages.all %}
+                    <div class="item">
+                        <strong>{{ lang.langue }}</strong> : {{ lang.niveau }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
+            </td>
+        </tr>
+    </table>
+</body>
+</html>

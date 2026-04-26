@@ -1,3 +1,4 @@
+{% load static %}
 <!DOCTYPE html>
 <html lang="fr">
 <head>
@@ -6,6 +7,8 @@
     <title>{% block title %}CV Generator{% endblock %}</title>
     <!-- Bootstrap 5 CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
     <!-- Google Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
     <style>
@@ -14,6 +17,8 @@
             background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
             min-height: 100vh;
             color: #333;
+            display: flex;
+            flex-direction: column;
         }
         
         .navbar {
@@ -81,6 +86,25 @@
         .animate-fade-in {
             animation: fadeIn 0.6s ease-out forwards;
         }
+
+        footer {
+            background: rgba(255, 255, 255, 0.7);
+            backdrop-filter: blur(10px);
+            -webkit-backdrop-filter: blur(10px);
+            border-top: 1px solid rgba(255, 255, 255, 0.3);
+            padding: 3rem 0;
+            margin-top: auto;
+        }
+
+        .footer-link {
+            color: #6c757d;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-link:hover {
+            color: #4facfe;
+        }
     </style>
 </head>
 <body>
@@ -120,6 +144,90 @@
     {% block content %}
     {% endblock %}
 </div>
+
+<!-- Section Supplémentaire : Nos Modèles de CV -->
+<section class="py-5" style="background: rgba(79, 172, 254, 0.05);">
+    <div class="container text-center">
+        <h2 class="fw-bold mb-4">Choisissez votre modèle de CV</h2>
+        <p class="text-muted mb-5">Découvrez nos designs professionnels et choisissez celui qui vous correspond.</p>
+        <div class="row g-4">
+            <div class="col-md-4">
+                <div class="glass-card p-0 overflow-hidden h-100">
+                    <img src="{% static 'images/template_modern.png' %}" class="img-fluid" alt="Modèle Moderne">
+                    <div class="p-4">
+                        <h4 class="fw-bold">Modèle Moderne</h4>
+                        <p class="text-muted small">Design épuré avec des accents bleus et des effets de verre.</p>
+                        <a href="{% url 'cv_create' %}" class="btn btn-primary btn-sm rounded-pill">Choisir ce modèle</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-0 overflow-hidden h-100">
+                    <img src="{% static 'images/template_classic.png' %}" class="img-fluid" alt="Modèle Classique">
+                    <div class="p-4">
+                        <h4 class="fw-bold">Modèle Classique</h4>
+                        <p class="text-muted small">Minimaliste et élégant, parfait pour tous les secteurs.</p>
+                        <a href="{% url 'cv_create' %}" class="btn btn-primary btn-sm rounded-pill">Choisir ce modèle</a>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-4">
+                <div class="glass-card p-0 overflow-hidden h-100">
+                    <!-- Utilisation d'un placeholder pour le 3ème modèle -->
+                    <div class="bg-light d-flex align-items-center justify-content-center" style="height: 200px; background: linear-gradient(45deg, #f3f4f6, #e5e7eb);">
+                        <span class="display-4">🎨</span>
+                    </div>
+                    <div class="p-4">
+                        <h4 class="fw-bold">Modèle Créatif</h4>
+                        <p class="text-muted small">Un design audacieux pour vous démarquer visuellement.</p>
+                        <a href="{% url 'cv_create' %}" class="btn btn-primary btn-sm rounded-pill">Choisir ce modèle</a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<footer class="mt-auto">
+    <div class="container">
+        <div class="row g-4">
+            <div class="col-lg-4 col-md-6">
+                <h5 class="fw-bold mb-3">CV Generator Pro</h5>
+                <p class="text-muted small">La plateforme moderne pour créer des CV professionnels en quelques minutes avec un design élégant et épuré.</p>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h6 class="fw-bold mb-3">Navigation</h6>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="/" class="footer-link small">Accueil</a></li>
+                    <li><a href="{% url 'cv_dashboard' %}" class="footer-link small">Dashboard</a></li>
+                    <li><a href="{% url 'cv_create' %}" class="footer-link small">Créer un CV</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-2 col-md-6">
+                <h6 class="fw-bold mb-3">Support</h6>
+                <ul class="list-unstyled mb-0">
+                    <li><a href="#" class="footer-link small">Aide</a></li>
+                    <li><a href="#" class="footer-link small">Contact</a></li>
+                    <li><a href="#" class="footer-link small">Conditions</a></li>
+                </ul>
+            </div>
+            <div class="col-lg-4 col-md-6">
+                <h6 class="fw-bold mb-3">Restez connecté</h6>
+                <p class="text-muted small mb-3">Rejoignez notre communauté pour des conseils carrière.</p>
+                <div class="d-flex gap-3">
+                    <a href="#" class="footer-link"><i class="bi bi-facebook"></i></a>
+                    <a href="#" class="footer-link"><i class="bi bi-twitter"></i></a>
+                    <a href="#" class="footer-link"><i class="bi bi-linkedin"></i></a>
+                    <a href="#" class="footer-link"><i class="bi bi-instagram"></i></a>
+                </div>
+            </div>
+        </div>
+        <hr class="my-4 opacity-25">
+        <div class="text-center text-muted small">
+            &copy; 2026 CV Generator Pro. Tous droits réservés.
+        </div>
+    </div>
+</footer>
 
 <!-- Bootstrap 5 JS Bundle -->
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
