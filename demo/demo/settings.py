@@ -37,7 +37,10 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    "myapp",
+    'accounts',
+    'templates',
+    'cv',
+    'generator',
     'crispy_forms',
     'crispy_bootstrap5',
 ]
@@ -77,8 +80,12 @@ WSGI_APPLICATION = 'demo.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
+        'ENGINE': 'django.db.backends.mysql',
+        'NAME': 'cv_generator',
+        'USER': 'root',
+        'PASSWORD': 'admin',
+        'HOST': '127.0.0.1',
+        'PORT': '3306',
     }
 }
 
@@ -134,3 +141,6 @@ DEFAULT_FROM_EMAIL = 'CV Generator <badrelqadmirio@gmail.com>'
 LOGIN_REDIRECT_URL = 'home'
 LOGOUT_REDIRECT_URL = 'home'
 LOGIN_URL = 'login'
+
+# Custom User Model
+AUTH_USER_MODEL = 'accounts.User'

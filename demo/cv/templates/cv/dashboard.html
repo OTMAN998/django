@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% block title %}Mon Dashboard - CV Generator{% endblock %}
+
+{% block content %}
+<div class="row mb-4 align-items-center">
+    <div class="col">
+        <h1 class="display-5 fw-bold" style="color: #2c3e50;">Mes CVs</h1>
+        <p class="text-muted">Gérez vos curriculum vitae en un seul endroit.</p>
+    </div>
+    <div class="col-auto">
+        <a href="{% url 'cv_create' %}" class="btn btn-primary btn-lg shadow-sm">
+            + Créer un nouveau CV
+        </a>
+    </div>
+</div>
+
+<div class="row g-4">
+    {% for cv in cvs %}
+    <div class="col-md-6 col-lg-4">
+        <div class="glass-card h-100">
+            <h3 class="h4 mb-3">{{ cv.titre_poste }}</h3>
+            <p class="text-muted small mb-4">Dernière mise à jour : {{ cv.updated_at|date:"d M Y" }}</p>
+            <div class="d-flex justify-content-between mt-auto">
+                <a href="{% url 'cv_detail' cv.pk %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">Éditer</a>
+                <button class="btn btn-outline-danger btn-sm rounded-pill px-3">Supprimer</button>
+            </div>
+        </div>
+    </div>
+    {% empty %}
+    <div class="col-12 text-center py-5">
+        <div class="glass-card d-inline-block p-5">
+            <h3 class="text-muted mb-4">Vous n'avez pas encore de CV.</h3>
+            <a href="{% url 'cv_create' %}" class="btn btn-primary">Commencez maintenant !</a>
+        </div>
+    </div>
+    {% endfor %}
+</div>
+{% endblock %}

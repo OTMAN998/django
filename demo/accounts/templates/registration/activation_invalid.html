@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+
+{% block title %}Lien invalide - CV Generator Pro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5 text-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card border-danger">
+            <div style="font-size: 4rem; color: #dc3545;">❌</div>
+            <h2 class="mt-3 mb-4 text-danger">Lien d'activation invalide</h2>
+            <p class="text-muted mb-4">Le lien d'activation est invalide ou a expiré. Veuillez vous réinscrire.</p>
+            <a href="{% url 'register' %}" class="btn btn-danger btn-lg">S'inscrire à nouveau</a>
+        </div>
+    </div>
+</div>
+{% endblock %}

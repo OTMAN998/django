@@ -1,0 +1,10 @@
+Bonjour {{ user.username }},
+
+Merci de vous être inscrit(e) sur CV Generator Pro !
+Veuillez cliquer sur le lien ci-dessous pour activer votre compte (valide pendant 24 heures) :
+
+http://{{ domain }}{% url 'activate' token %}
+
+Si vous n'avez pas demandé cette inscription, veuillez ignorer cet e-mail.
+
+L'équipe CV Generator Pro.

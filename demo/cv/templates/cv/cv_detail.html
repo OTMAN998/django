@@ -1,0 +1,115 @@
+{% extends 'base.html' %}
+
+{% block title %}Détail de {{ cv.titre_poste }}{% endblock %}
+
+{% block content %}
+<div class="row">
+    <!-- Colonne Principale : Informations de base -->
+    <div class="col-lg-4 mb-4">
+        <div class="glass-card text-center">
+            {% if cv.photo %}
+                <img src="{{ cv.photo.url }}" alt="Photo" class="rounded-circle mb-3" style="width: 150px; height: 150px; object-fit: cover;">
+            {% else %}
+                <div class="rounded-circle bg-secondary d-inline-flex align-items-center justify-content-center text-white mb-3" style="width: 150px; height: 150px; font-size: 3rem;">
+                    {{ cv.user.username.0|upper }}
+                </div>
+            {% endif %}
+            <h2 class="h3">{{ cv.user.get_full_name|default:cv.user.username }}</h2>
+            <h3 class="h5 text-primary">{{ cv.titre_poste }}</h3>
+            <hr>
+            <p class="small text-muted text-start mb-1"><strong>Email:</strong> {{ cv.user.email }}</p>
+            {% if cv.adresse %}
+                <p class="small text-muted text-start mb-1"><strong>Adresse:</strong> {{ cv.adresse }}</p>
+            {% endif %}
+            {% if cv.linkedin %}
+                <p class="small text-muted text-start mb-3"><strong>LinkedIn:</strong> <a href="{{ cv.linkedin }}" target="_blank">Lien</a></p>
+            {% endif %}
+            
+            <a href="#" class="btn btn-outline-primary btn-sm w-100 rounded-pill mt-3">Éditer les infos</a>
+        </div>
+        
+        <div class="glass-card mt-4 text-center">
+            <h4 class="h5 mb-3">Générer le PDF</h4>
+            <button class="btn btn-success w-100 rounded-pill">Télécharger le CV</button>
+        </div>
+    </div>
+
+    <!-- Colonne Secondaire : Sections du CV -->
+    <div class="col-lg-8">
+        <!-- Expériences -->
+        <div class="glass-card mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 m-0">Expériences Professionnelles</h3>
+                <a href="{% url 'add_experience' cv.pk %}" class="btn btn-sm btn-primary rounded-pill">+ Ajouter</a>
+            </div>
+            {% for exp in cv.experiences.all %}
+                <div class="border-start border-primary border-3 ps-3 mb-3">
+                    <h5 class="h6 mb-0">{{ exp.poste }} chez {{ exp.entreprise }}</h5>
+                    <small class="text-muted">{{ exp.date_debut|date:"M Y" }} - {% if exp.date_fin %}{{ exp.date_fin|date:"M Y" }}{% else %}Présent{% endif %}</small>
+                    <p class="small mt-2">{{ exp.description }}</p>
+                </div>
+            {% empty %}
+                <p class="text-muted small">Aucune expérience ajoutée.</p>
+            {% endfor %}
+        </div>
+
+        <!-- Formations -->
+        <div class="glass-card mb-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h3 class="h4 m-0">Formations & Diplômes</h3>
+                <a href="#" class="btn btn-sm btn-primary rounded-pill">+ Ajouter</a>
+            </div>
+            {% for edu in cv.educations.all %}
+                <div class="border-start border-success border-3 ps-3 mb-3">
+                    <h5 class="h6 mb-0">{{ edu.diplome }}</h5>
+                    <small class="text-muted">{{ edu.etablissement }} ({{ edu.annee }})</small>
+                </div>
+            {% empty %}
+                <p class="text-muted small">Aucune formation ajoutée.</p>
+            {% endfor %}
+        </div>
+
+        <div class="row">
+            <!-- Compétences -->
+            <div class="col-md-6 mb-4">
+                <div class="glass-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="h5 m-0">Compétences</h3>
+                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">+</a>
+                    </div>
+                    {% for skill in cv.skills.all %}
+                        <div class="mb-2">
+                            <div class="d-flex justify-content-between small">
+                                <span>{{ skill.nom }}</span>
+                                <span>{{ skill.niveau }}%</span>
+                            </div>
+                            <div class="progress" style="height: 5px;">
+                                <div class="progress-bar" role="progressbar" style="width: {{ skill.niveau }}%;"></div>
+                            </div>
+                        </div>
+                    {% empty %}
+                        <p class="text-muted small">Aucune compétence.</p>
+                    {% endfor %}
+                </div>
+            </div>
+
+            <!-- Langues -->
+            <div class="col-md-6 mb-4">
+                <div class="glass-card h-100">
+                    <div class="d-flex justify-content-between align-items-center mb-3">
+                        <h3 class="h5 m-0">Langues</h3>
+                        <a href="#" class="btn btn-sm btn-outline-primary rounded-pill">+</a>
+                    </div>
+                    <ul class="list-unstyled mb-0">
+                    {% for lang in cv.languages.all %}
+                        <li class="small mb-1"><strong>{{ lang.langue }}</strong> : {{ lang.niveau }}</li>
+                    {% empty %}
+                        <li class="text-muted small">Aucune langue.</li>
+                    {% endfor %}
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
