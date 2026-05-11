@@ -28,6 +28,11 @@
             <p class="small text-muted text-start mb-3"><strong>LinkedIn :</strong> <a href="{{ cv.linkedin }}"
                     target="_blank">Lien</a></p>
             {% endif %}
+            {% if cv.template_choisi %}
+            <p class="small text-muted text-start mb-3"><strong>Template choisi :</strong> {{ cv.template_choisi.nom }}</p>
+            {% else %}
+            <p class="small text-muted text-start mb-3"><strong>Template choisi :</strong> Aucun template sélectionné</p>
+            {% endif %}
             <a href="{% url 'cv_edit' cv.pk %}" class="btn btn-outline-primary btn-sm w-100 rounded-pill mt-3">Éditer les infos</a>
         </div>
 

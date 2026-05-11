@@ -13,7 +13,40 @@
             </div>
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
-                {{ form|crispy }}
+                {{ form.titre_poste|as_crispy_field }}
+                {{ form.photo|as_crispy_field }}
+                {{ form.adresse|as_crispy_field }}
+                {{ form.linkedin|as_crispy_field }}
+
+                <div class="mb-4">
+                    <h4 class="mb-3">Choisir un template</h4>
+                    <div class="row g-3">
+                        {% for template in templates %}
+                        <div class="col-12 col-md-6">
+                            <label class="card h-100 border {% if form.template_choisi.value == template.pk|stringformat:'s' %}border-primary{% else %}border-secondary{% endif %} rounded p-3 cursor-pointer">
+                                <div class="d-flex align-items-center mb-3">
+                                    <input type="radio" name="template_choisi" value="{{ template.pk }}" class="form-check-input me-2" {% if form.template_choisi.value == template.pk|stringformat:'s' %}checked{% endif %}>
+                                    <div>
+                                        <div class="fw-semibold">{{ template.nom }}</div>
+                                        <div class="text-muted small">{{ template.type }}</div>
+                                    </div>
+                                </div>
+                                {% if template.apercu %}
+                                <img src="{{ template.apercu.url }}" alt="{{ template.nom }}" class="img-fluid rounded mb-2" style="max-height:180px; object-fit:cover; width:100%;">
+                                {% else %}
+                                <div class="bg-light rounded p-4 text-center text-muted mb-2">Aperçu indisponible</div>
+                                {% endif %}
+                                <p class="text-muted small mb-0">Sélectionnez ce style pour générer un CV {{ template.type|lower }}.</p>
+                            </label>
+                        </div>
+                        {% empty %}
+                        <div class="col-12">
+                            <p class="text-muted">Aucun template disponible pour le moment.</p>
+                        </div>
+                        {% endfor %}
+                    </div>
+                </div>
+
                 <div class="d-grid mt-4">
                     <button type="submit" class="btn btn-primary btn-lg">Enregistrer et Continuer</button>
                 </div>

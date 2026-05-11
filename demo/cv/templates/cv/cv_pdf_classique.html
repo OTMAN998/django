@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CV - {{ cv.user.get_full_name|default:cv.user.username }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: 'Georgia', 'Garamond', serif;
+            color: #222;
+            line-height: 1.8;
+            background: white;
+        }
+        .container {
+            max-width: 850px;
+            margin: 0 auto;
+            padding: 50px 40px;
+            background: white;
+        }
+        header {
+            text-align: center;
+            border-bottom: 2px solid #000;
+            padding-bottom: 25px;
+            margin-bottom: 35px;
+        }
+        h1 {
+            font-size: 28px;
+            color: #000;
+            margin: 0;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .titre-poste {
+            font-size: 14px;
+            color: #333;
+            margin-top: 8px;
+            font-style: italic;
+            letter-spacing: 0.3px;
+        }
+        .header-info {
+            margin-top: 12px;
+            font-size: 12px;
+            color: #444;
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+        .header-info span {
+            border-right: 1px solid #ccc;
+            padding-right: 20px;
+        }
+        .header-info span:last-child {
+            border-right: none;
+            padding-right: 0;
+        }
+        section {
+            margin-bottom: 30px;
+        }
+        h2 {
+            font-size: 13px;
+            color: #000;
+            border-bottom: 1px solid #000;
+            padding-bottom: 6px;
+            margin-bottom: 15px;
+            text-transform: uppercase;
+            font-weight: 700;
+            letter-spacing: 0.5px;
+        }
+        .section-content {
+            padding-left: 0;
+        }
+        .entry {
+            margin-bottom: 18px;
+            page-break-inside: avoid;
+        }
+        .entry:last-child {
+            margin-bottom: 0;
+        }
+        .entry-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 5px;
+        }
+        .entry-left {
+            flex: 1;
+        }
+        .entry-title {
+            font-weight: 700;
+            color: #000;
+            font-size: 13px;
+            margin: 0;
+        }
+        .entry-subtitle {
+            font-style: italic;
+            color: #333;
+            font-size: 12px;
+            margin: 2px 0 0 0;
+        }
+        .entry-date {
+            color: #666;
+            font-size: 11px;
+            text-align: right;
+            white-space: nowrap;
+            padding-left: 20px;
+        }
+        .entry-description {
+            color: #444;
+            font-size: 12px;
+            margin-top: 6px;
+            line-height: 1.6;
+        }
+        .skills-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            font-size: 12px;
+        }
+        .skill-item {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 4px 0;
+            border-bottom: 1px dotted #ddd;
+        }
+        .skill-name {
+            font-weight: 500;
+            color: #000;
+        }
+        .skill-level {
+            color: #666;
+        }
+        .languages-list {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            font-size: 12px;
+        }
+        .language-item {
+            padding: 4px 0;
+        }
+        .language-name {
+            font-weight: 600;
+            color: #000;
+            margin-bottom: 2px;
+        }
+        .language-level {
+            color: #666;
+            font-size: 11px;
+        }
+        @media print {
+            body { margin: 0; padding: 0; }
+            .container { max-width: 100%; padding: 30px 20px; }
+            section { page-break-inside: avoid; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- Header -->
+        <header>
+            <h1>{{ cv.user.get_full_name|default:cv.user.username }}</h1>
+            <div class="titre-poste">{{ cv.titre_poste }}</div>
+            <div class="header-info">
+                {% if cv.user.email %}
+                <span>{{ cv.user.email }}</span>
+                {% endif %}
+                {% if cv.user.telephone %}
+                <span>{{ cv.user.telephone }}</span>
+                {% endif %}
+                {% if cv.adresse %}
+                <span>{{ cv.adresse }}</span>
+                {% endif %}
+            </div>
+        </header>
+
+        <!-- Expériences -->
+        {% if cv.experiences.all %}
+        <section>
+            <h2>Expérience Professionnelle</h2>
+            <div class="section-content">
+                {% for exp in cv.experiences.all %}
+                <div class="entry">
+                    <div class="entry-header">
+                        <div class="entry-left">
+                            <h3 class="entry-title">{{ exp.poste }}</h3>
+                            <p class="entry-subtitle">{{ exp.entreprise }}</p>
+                        </div>
+                        <div class="entry-date">
+                            {{ exp.date_debut|date:"m/Y" }} - 
+                            {% if exp.date_fin %}{{ exp.date_fin|date:"m/Y" }}{% else %}Présent{% endif %}
+                        </div>
+                    </div>
+                    {% if exp.description %}
+                    <div class="entry-description">{{ exp.description }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Formations -->
+        {% if cv.educations.all %}
+        <section>
+            <h2>Formation</h2>
+            <div class="section-content">
+                {% for edu in cv.educations.all %}
+                <div class="entry">
+                    <div class="entry-header">
+                        <div class="entry-left">
+                            <h3 class="entry-title">{{ edu.diplome }}</h3>
+                            <p class="entry-subtitle">{{ edu.etablissement }}</p>
+                        </div>
+                        <div class="entry-date">{{ edu.annee }}</div>
+                    </div>
+                    {% if edu.mention %}
+                    <div class="entry-description">Mention : {{ edu.mention }}</div>
+                    {% endif %}
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Compétences -->
+        {% if cv.skills.all %}
+        <section>
+            <h2>Compétences</h2>
+            <div class="skills-grid">
+                {% for skill in cv.skills.all %}
+                <div class="skill-item">
+                    <span class="skill-name">{{ skill.nom }}</span>
+                    <span class="skill-level">{{ skill.niveau }}%</span>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+
+        <!-- Langues -->
+        {% if cv.languages.all %}
+        <section>
+            <h2>Langues</h2>
+            <div class="languages-list">
+                {% for lang in cv.languages.all %}
+                <div class="language-item">
+                    <div class="language-name">{{ lang.langue }}</div>
+                    <div class="language-level">{{ lang.niveau }}</div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endif %}
+    </div>
+</body>
+</html>

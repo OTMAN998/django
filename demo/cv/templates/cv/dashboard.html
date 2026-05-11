@@ -21,15 +21,38 @@
 <div class="row g-4">
     {% for cv in cvs %}
     <div class="col-md-6 col-lg-4">
-        <div class="glass-card h-100">
-            <h3 class="h4 mb-3">{{ cv.titre_poste }}</h3>
-            <p class="text-muted small mb-4">Dernière mise à jour : {{ cv.updated_at|date:"d M Y" }}</p>
-            <div class="d-flex justify-content-between mt-auto">
-                <a href="{% url 'cv_detail' cv.pk %}" class="btn btn-outline-dark btn-sm rounded-pill px-3">Éditer</a>
-                <form method="post" action="{% url 'cv_delete' cv.pk %}" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer ce CV ? Cette action est irréversible.')" class="d-inline">
-                    {% csrf_token %}
-                    <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-3">Supprimer</button>
-                </form>
+        <div class="glass-card h-100 d-flex flex-column justify-content-between">
+            <div>
+                <div class="d-flex align-items-center mb-4">
+                    {% if cv.photo %}
+                        <img src="{{ cv.photo.url }}" alt="Photo CV" class="rounded-circle me-3" style="width:64px; height:64px; object-fit:cover;">
+                    {% else %}
+                        <div class="rounded-circle bg-primary text-white d-flex align-items-center justify-content-center me-3" style="width:64px; height:64px; font-size:1.25rem;">
+                            {{ cv.user.get_full_name|default:cv.user.username|slice:":1"|upper }}
+                        </div>
+                    {% endif %}
+                    <div>
+                        <h3 class="h5 mb-1">{{ cv.user.get_full_name|default:cv.user.username }}</h3>
+                        <p class="text-muted small mb-0">{{ cv.user.email }}</p>
+                    </div>
+                </div>
+
+                <h4 class="h6 text-primary mb-2">{{ cv.titre_poste }}</h4>
+                {% if cv.adresse %}
+                    <p class="text-muted small mb-3">{{ cv.adresse }}</p>
+                {% endif %}
+            </div>
+
+            <div class="mt-4">
+                <p class="text-muted small mb-3">Dernière mise à jour : {{ cv.updated_at|date:"d M Y" }}</p>
+                <div class="d-flex gap-2 flex-wrap">
+                    <a href="{% url 'cv_detail' cv.pk %}" class="btn btn-primary btn-sm rounded-pill px-4">Voir</a>
+                    <a href="{% url 'cv_edit' cv.pk %}" class="btn btn-outline-dark btn-sm rounded-pill px-4">Éditer</a>
+                    <form method="post" action="{% url 'cv_delete' cv.pk %}" class="m-0">
+                        {% csrf_token %}
+                        <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-4" onclick="return confirm('Voulez-vous vraiment supprimer ce CV ? Cela supprimera définitivement ce cart.');">Supprimer</button>
+                    </form>
+                </div>
             </div>
         </div>
     </div>
@@ -42,4 +65,5 @@
     </div>
     {% endfor %}
 </div>
+
 {% endblock %}

@@ -5,6 +5,7 @@ from django.template.loader import get_template
 from xhtml2pdf import pisa
 from .models import CVProfile, Experience, Education, Skill, Language
 from .forms import CVProfileForm, ExperienceForm, EducationForm, SkillForm, LanguageForm
+from templates.models import Template as TemplateModel
 
 @login_required
 def dashboard(request):
@@ -15,6 +16,7 @@ def dashboard(request):
 @login_required
 def cv_create(request):
     """Créer un nouveau profil de CV."""
+    templates = TemplateModel.objects.all()
     if request.method == 'POST':
         form = CVProfileForm(request.POST, request.FILES)
         if form.is_valid():
@@ -24,7 +26,11 @@ def cv_create(request):
             return redirect('cv_detail', pk=cv.pk)
     else:
         form = CVProfileForm()
-    return render(request, 'cv/cv_form.html', {'form': form, 'title': 'Créer un nouveau CV'})
+    return render(request, 'cv/cv_form.html', {
+        'form': form,
+        'title': 'Créer un nouveau CV',
+        'templates': templates,
+    })
 
 @login_required
 def cv_detail(request, pk):
@@ -36,6 +42,7 @@ def cv_detail(request, pk):
 def cv_edit(request, pk):
     """Modifier les informations principales du profil CV."""
     cv = get_object_or_404(CVProfile, pk=pk, user=request.user)
+    templates = TemplateModel.objects.all()
     if request.method == 'POST':
         form = CVProfileForm(request.POST, request.FILES, instance=cv)
         if form.is_valid():
@@ -43,7 +50,12 @@ def cv_edit(request, pk):
             return redirect('cv_detail', pk=cv.pk)
     else:
         form = CVProfileForm(instance=cv)
-    return render(request, 'cv/cv_form.html', {'form': form, 'title': 'Modifier les infos du CV', 'cv': cv})
+    return render(request, 'cv/cv_form.html', {
+        'form': form,
+        'title': 'Modifier les infos du CV',
+        'cv': cv,
+        'templates': templates,
+    })
 
 @login_required
 def cv_delete(request, pk):
@@ -206,7 +218,18 @@ def delete_language(request, pk):
 def generate_pdf_cv(request, pk):
     """Génère un PDF du CV à partir d'un template HTML."""
     cv = get_object_or_404(CVProfile, pk=pk, user=request.user)
-    template_path = 'cv/cv_pdf.html'
+    
+    # Choisir le template basé sur le choix de l'utilisateur
+    if cv.template_choisi:
+        if 'moderne' in cv.template_choisi.nom.lower():
+            template_path = 'cv/cv_pdf_moderne.html'
+        elif 'classique' in cv.template_choisi.nom.lower():
+            template_path = 'cv/cv_pdf_classique.html'
+        else:
+            template_path = 'cv/cv_pdf_moderne.html'  # Par défaut
+    else:
+        template_path = 'cv/cv_pdf_moderne.html'  # Par défaut si aucun template
+    
     context = {'cv': cv}
     
     # Créer l'objet de réponse Django avec le type de contenu PDF

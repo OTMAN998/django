@@ -5,8 +5,16 @@ class CVProfileForm(forms.ModelForm):
     class Meta:
         model = CVProfile
         fields = ['titre_poste', 'photo', 'adresse', 'linkedin', 'template_choisi']
+        labels = {
+            'titre_poste': 'Titre du poste',
+            'photo': 'Photo',
+            'adresse': 'Adresse',
+            'linkedin': 'LinkedIn',
+            'template_choisi': 'Choisir un template pour le CV',
+        }
         widgets = {
             'adresse': forms.Textarea(attrs={'rows': 3}),
+            'template_choisi': forms.RadioSelect,
         }
 
 class ExperienceForm(forms.ModelForm):
