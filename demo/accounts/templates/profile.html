@@ -4,67 +4,109 @@
 {% block title %}Mon Profil - CV Generator Pro{% endblock %}
 
 {% block content %}
+
 <div class="row justify-content-center mt-5">
+
     <div class="col-md-8 col-lg-6">
+
         <div class="glass-card">
+
             <h2 class="mb-4">Mon Profil</h2>
+
+            {% if messages %}
+            {% for message in messages %}
+            <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                {{ message }}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+            {% endfor %}
+            {% endif %}
+
             <form method="post" id="profileForm">
+
                 {% csrf_token %}
+
+                {% if form.non_field_errors %}
+                <div class="alert alert-danger">
+                    {% for error in form.non_field_errors %}
+                    <p>{{ error }}</p>
+                    {% endfor %}
+                </div>
+                {% endif %}
+
                 <div class="mb-3">
-                    <label for="id_first_name" class="form-label">Prénom</label>
+                    <label for="id_first_name" class="form-label">
+                        Prénom
+                    </label>
                     {{ form.first_name }}
+                    {% if form.first_name.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.first_name.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </div>
+
                 <div class="mb-3">
-                    <label for="id_last_name" class="form-label">Nom</label>
+                    <label for="id_last_name" class="form-label">
+                        Nom
+                    </label>
                     {{ form.last_name }}
+                    {% if form.last_name.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.last_name.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </div>
+
                 <div class="mb-3">
-                    <label for="id_telephone" class="form-label">Téléphone</label>
+                    <label for="id_telephone" class="form-label">
+                        Téléphone
+                    </label>
                     {{ form.telephone }}
+                    {% if form.telephone.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.telephone.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </div>
+
                 <div class="mb-3">
-                    <label for="id_date_naissance" class="form-label">Date de naissance</label>
+                    <label for="id_date_naissance" class="form-label">
+                        Date de naissance
+                    </label>
                     {{ form.date_naissance }}
+                    {% if form.date_naissance.errors %}
+                    <div class="text-danger small">
+                        {% for error in form.date_naissance.errors %}
+                        {{ error }}
+                        {% endfor %}
+                    </div>
+                    {% endif %}
                 </div>
 
                 <div class="d-flex flex-wrap gap-2 mt-3">
-                    <button type="button" id="editProfileBtn" class="btn btn-outline-primary">Modifier le profil</button>
-                    <button type="button" id="resetProfileBtn" class="btn btn-outline-secondary d-none">Réinitialiser</button>
-                    <button type="submit" id="saveProfileBtn" class="btn btn-primary d-none">Sauvegarder</button>
+
+                    <button
+                        type="submit"
+                        class="btn btn-primary"
+                    >
+                        Sauvegarder
+                    </button>
+
                 </div>
+
             </form>
+
         </div>
+
     </div>
+
 </div>
 
-<script>
-    const editButton = document.getElementById('editProfileBtn');
-    const resetButton = document.getElementById('resetProfileBtn');
-    const saveButton = document.getElementById('saveProfileBtn');
-    const form = document.getElementById('profileForm');
-    const inputs = form.querySelectorAll('input:not([type=hidden])');
-
-    function setInputsDisabled(disabled) {
-        inputs.forEach(input => {
-            if (input.id !== 'id_username' && input.type !== 'submit' && input.type !== 'button') {
-                input.disabled = disabled;
-            }
-        });
-    }
-
-    editButton.addEventListener('click', () => {
-        setInputsDisabled(false);
-        editButton.classList.add('d-none');
-        resetButton.classList.remove('d-none');
-        saveButton.classList.remove('d-none');
-    });
-
-    resetButton.addEventListener('click', () => {
-        inputs.forEach(input => {
-            if (input.type !== 'hidden' && input.type !== 'submit' && input.type !== 'button') {
-                input.value = '';
-            }
-        });
-    });
-</script>
 {% endblock %}

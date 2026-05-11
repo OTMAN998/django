@@ -4,6 +4,17 @@
 
 {% block content %}
 <div class="row">
+    <div class="col-12 mb-4">
+        <div class="d-flex justify-content-between align-items-center">
+            <h1 class="h2 m-0">Détail du CV</h1>
+            <a href="{% url 'generate_pdf_cv' cv.pk %}" class="btn btn-success btn-lg rounded-pill">
+                <i class="fas fa-file-pdf me-2"></i>Générer le PDF
+            </a>
+        </div>
+    </div>
+</div>
+
+<div class="row">
 
     <!-- Colonne Principale -->
     <div class="col-lg-4 mb-4">
@@ -19,6 +30,12 @@
             {% endif %}
             <h2 class="h3">{{ cv.user.get_full_name|default:cv.user.username }}</h2>
             <h3 class="h5 text-primary">{{ cv.titre_poste }}</h3>
+            {% if cv.description %}
+            <p class="small text-muted text-start mt-2 px-2"
+                style="font-style: italic; border-left: 3px solid #0d6efd; word-wrap: break-word; overflow-wrap: break-word; white-space: pre-wrap; max-width: 100%;">
+                {{ cv.description }}
+            </p>
+            {% endif %}
             <hr>
             <p class="small text-muted text-start mb-1"><strong>Email :</strong> {{ cv.user.email }}</p>
             {% if cv.adresse %}
@@ -29,11 +46,14 @@
                     target="_blank">Lien</a></p>
             {% endif %}
             {% if cv.template_choisi %}
-            <p class="small text-muted text-start mb-3"><strong>Template choisi :</strong> {{ cv.template_choisi.nom }}</p>
+            <p class="small text-muted text-start mb-3"><strong>Template choisi :</strong> {{ cv.template_choisi.nom }}
+            </p>
             {% else %}
-            <p class="small text-muted text-start mb-3"><strong>Template choisi :</strong> Aucun template sélectionné</p>
+            <p class="small text-muted text-start mb-3"><strong>Template choisi :</strong> Aucun template sélectionné
+            </p>
             {% endif %}
-            <a href="{% url 'cv_edit' cv.pk %}" class="btn btn-outline-primary btn-sm w-100 rounded-pill mt-3">Éditer les infos</a>
+            <a href="{% url 'cv_edit' cv.pk %}" class="btn btn-outline-primary btn-sm w-100 rounded-pill mt-3">Éditer
+                les infos</a>
         </div>
 
         <div class="glass-card mt-4 text-center">

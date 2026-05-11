@@ -6,6 +6,42 @@ from xhtml2pdf import pisa
 from .models import CVProfile, Experience, Education, Skill, Language
 from .forms import CVProfileForm, ExperienceForm, EducationForm, SkillForm, LanguageForm
 from templates.models import Template as TemplateModel
+import os
+from django.conf import settings
+
+def link_callback(uri, rel):
+    """
+    Convert HTML URIs to absolute system paths so xhtml2pdf can access those
+    resources
+    """
+    # use short variable names
+    sUrl = settings.STATIC_URL
+    sRoot = settings.STATIC_ROOT
+    mUrl = settings.MEDIA_URL
+    mRoot = settings.MEDIA_ROOT
+
+    # convert URIs to absolute system paths
+    if uri.startswith(mUrl):
+        path = os.path.join(mRoot, uri.replace(mUrl, ""))
+    elif uri.startswith(sUrl):
+        if sRoot:
+            path = os.path.join(sRoot, uri.replace(sUrl, ""))
+        else:
+            # Fallback to STATICFILES_DIRS if STATIC_ROOT is not set (typical in development)
+            path = None
+            for static_dir in settings.STATICFILES_DIRS:
+                test_path = os.path.join(static_dir, uri.replace(sUrl, ""))
+                if os.path.isfile(test_path):
+                    path = test_path
+                    break
+    else:
+        return uri
+
+    # make sure that file exists
+    if path and os.path.isfile(path):
+        return path
+    
+    return uri
 
 @login_required
 def dashboard(request):
@@ -22,6 +58,15 @@ def cv_create(request):
         if form.is_valid():
             cv = form.save(commit=False)
             cv.user = request.user
+            # Handle template selection manually (raw radio button in template)
+            template_id = request.POST.get('template_choisi')
+            if template_id:
+                try:
+                    cv.template_choisi = TemplateModel.objects.get(pk=template_id)
+                except TemplateModel.DoesNotExist:
+                    cv.template_choisi = None
+            else:
+                cv.template_choisi = None
             cv.save()
             return redirect('cv_detail', pk=cv.pk)
     else:
@@ -46,7 +91,17 @@ def cv_edit(request, pk):
     if request.method == 'POST':
         form = CVProfileForm(request.POST, request.FILES, instance=cv)
         if form.is_valid():
-            form.save()
+            cv = form.save(commit=False)
+            # Handle template selection manually
+            template_id = request.POST.get('template_choisi')
+            if template_id:
+                try:
+                    cv.template_choisi = TemplateModel.objects.get(pk=template_id)
+                except TemplateModel.DoesNotExist:
+                    cv.template_choisi = None
+            else:
+                cv.template_choisi = None
+            cv.save()
             return redirect('cv_detail', pk=cv.pk)
     else:
         form = CVProfileForm(instance=cv)
@@ -232,19 +287,33 @@ def generate_pdf_cv(request, pk):
     
     context = {'cv': cv}
     
-    # Créer l'objet de réponse Django avec le type de contenu PDF
-    response = HttpResponse(content_type='application/pdf')
-    response['Content-Disposition'] = f'attachment; filename="cv_{cv.user.username}.pdf"'
+    # Générer le PDF et le sauvegarder
+    import os
+    from django.conf import settings
+    
+    # Créer le répertoire si nécessaire
+    pdf_dir = os.path.join(settings.MEDIA_ROOT, 'cv_pdfs')
+    os.makedirs(pdf_dir, exist_ok=True)
+    
+    filename = f"cv_{cv.user.username}_{cv.pk}.pdf"
+    filepath = os.path.join(pdf_dir, filename)
     
     # Trouver le template et le rendre en HTML
     template = get_template(template_path)
     html = template.render(context)
-
-    # Créer le PDF
-    pisa_status = pisa.CreatePDF(html, dest=response)
+    
+    # Créer le PDF dans un fichier
+    with open(filepath, 'wb') as pdf_file:
+        pisa_status = pisa.CreatePDF(html, dest=pdf_file, link_callback=link_callback)
     
     # En cas d'erreur
     if pisa_status.err:
-       return HttpResponse('Une erreur est survenue lors de la génération du PDF <pre>' + html + '</pre>')
+        return HttpResponse('Une erreur est survenue lors de la génération du PDF <pre>' + html + '</pre>')
     
-    return response
+    # Retourner la page avec le lien de téléchargement
+    download_url = f"{settings.MEDIA_URL}cv_pdfs/{filename}"
+    return render(request, 'cv/pdf_generated.html', {
+        'cv': cv,
+        'download_url': download_url,
+        'filename': filename
+    })

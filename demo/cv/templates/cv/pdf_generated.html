@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}PDF Généré - {{ cv.titre_poste }}{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card text-center">
+            <div class="mb-4">
+                <i class="fas fa-check-circle text-success" style="font-size: 4rem;"></i>
+            </div>
+            <h2 class="h4 mb-3">PDF Généré avec Succès !</h2>
+            <p class="text-muted mb-4">Votre CV a été généré en PDF. Cliquez sur le bouton ci-dessous pour le télécharger.</p>
+            
+            <a href="{{ download_url }}" class="btn btn-success btn-lg rounded-pill" download="{{ filename }}">
+                <i class="fas fa-download me-2"></i>Télécharger le PDF
+            </a>
+            
+            <div class="mt-4">
+                <a href="{% url 'cv_detail' cv.pk %}" class="btn btn-outline-secondary rounded-pill">Retour au CV</a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

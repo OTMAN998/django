@@ -44,10 +44,12 @@
             </div>
 
             <div class="mt-4">
+                <p class="text-muted small mb-3">Description : {{ cv.description|default:"Aucune description disponible." }}</p>
+                <p class="text-muted small mb-3">Créé le : {{ cv.created_at|date:"d M Y" }}</p>
                 <p class="text-muted small mb-3">Dernière mise à jour : {{ cv.updated_at|date:"d M Y" }}</p>
+                <p class="text-muted small mb-3">Template : {{ cv.template_choisi }}</p>
                 <div class="d-flex gap-2 flex-wrap">
                     <a href="{% url 'cv_detail' cv.pk %}" class="btn btn-primary btn-sm rounded-pill px-4">Voir</a>
-                    <a href="{% url 'cv_edit' cv.pk %}" class="btn btn-outline-dark btn-sm rounded-pill px-4">Éditer</a>
                     <form method="post" action="{% url 'cv_delete' cv.pk %}" class="m-0">
                         {% csrf_token %}
                         <button type="submit" class="btn btn-outline-danger btn-sm rounded-pill px-4" onclick="return confirm('Voulez-vous vraiment supprimer ce CV ? Cela supprimera définitivement ce cart.');">Supprimer</button>

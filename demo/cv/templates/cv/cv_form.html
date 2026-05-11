@@ -14,6 +14,7 @@
             <form method="post" enctype="multipart/form-data">
                 {% csrf_token %}
                 {{ form.titre_poste|as_crispy_field }}
+                {{ form.description|as_crispy_field }}
                 {{ form.photo|as_crispy_field }}
                 {{ form.adresse|as_crispy_field }}
                 {{ form.linkedin|as_crispy_field }}

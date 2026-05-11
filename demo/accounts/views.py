@@ -7,6 +7,7 @@ from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.core import signing
 from django.contrib.auth.decorators import login_required
+from django.contrib import messages
 
 def home(request):
     return render(request, "home.html")
@@ -67,6 +68,7 @@ def profile(request):
         form = ProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Votre profil a été mis à jour avec succès.')
             return redirect('profile')
     else:
         form = ProfileForm(instance=request.user)

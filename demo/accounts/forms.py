@@ -26,26 +26,10 @@ class ProfileForm(forms.ModelForm):
             'date_naissance': 'Date de naissance',
         }
         widgets = {
-            'first_name': forms.TextInput(attrs={
-                'placeholder': 'Prénom',
-                'class': 'form-control',
-                'disabled': 'disabled',
-            }),
-            'last_name': forms.TextInput(attrs={
-                'placeholder': 'Nom',
-                'class': 'form-control',
-                'disabled': 'disabled',
-            }),
-            'telephone': forms.TextInput(attrs={
-                'placeholder': 'Téléphone',
-                'class': 'form-control',
-                'disabled': 'disabled',
-            }),
-            'date_naissance': forms.DateInput(attrs={
-                'type': 'date',
-                'class': 'form-control',
-                'disabled': 'disabled',
-            }),
+            'first_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Prénom'}),
+            'last_name': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Nom'}),
+            'telephone': forms.TextInput(attrs={'class': 'form-control', 'placeholder': 'Téléphone'}),
+            'date_naissance': forms.DateInput(attrs={'type': 'date', 'class': 'form-control'}),
         }
 
 from django.contrib.auth.forms import PasswordResetForm

@@ -1,254 +1,378 @@
 <!DOCTYPE html>
 <html lang="fr">
+
 <head>
     <meta charset="UTF-8">
-    <title>CV Premium - {{ cv.user.get_full_name|default:cv.user.username }}</title>
+    <title>{{ cv.user.get_full_name|default:cv.user.username }} - 2026 Premium CV</title>
     <style>
         @page {
             size: A4;
             margin: 0;
         }
+
         * {
             margin: 0;
             padding: 0;
             box-sizing: border-box;
         }
+
         body {
-            font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif;
-            color: #2d3436;
+            font-family: Helvetica, Arial, sans-serif;
+            color: #1e293b;
+            /* Slate 800 */
             background: #ffffff;
             line-height: 1.5;
+            font-size: 10pt;
         }
 
-        /* Layout Structure */
         .cv-table {
             width: 100%;
             border-collapse: collapse;
             min-height: 29.7cm;
         }
 
-        /* Sidebar - Style Minimaliste Sombre */
+        /* Sidebar - 2026 Dark Mode Aesthetic */
         .sidebar {
             width: 32%;
-            background-color: #1e272e; /* Anthracite élégant */
-            color: #ffffff;
-            padding: 50px 25px;
+            background-color: #0f172a;
+            /* Slate 900 */
+            color: #f8fafc;
+            /* Slate 50 */
+            padding: 40px 20px;
             vertical-align: top;
         }
 
-        /* Main Content */
+        .profile-section {
+            text-align: center;
+            margin-bottom: 40px;
+        }
+
+        .profile-photo {
+            width: 130px;
+            height: 130px;
+            border-radius: 65px;
+            border: 2px solid #10b981;
+            /* Emerald 500 */
+            margin-bottom: 15px;
+        }
+
+        .sidebar-section {
+            margin-bottom: 35px;
+        }
+
+        .sidebar-title {
+            font-size: 10pt;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            color: #10b981;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        .contact-item {
+            margin-bottom: 10px;
+            font-size: 8.5pt;
+            color: #cbd5e1;
+            /* Slate 300 */
+        }
+
+        .contact-icon {
+            color: #10b981;
+            margin-right: 5px;
+        }
+
+        /* Skills - 2026 Minimalist Blocks */
+        .skill-item {
+            margin-bottom: 12px;
+        }
+
+        .skill-name {
+            font-size: 8.5pt;
+            display: block;
+            margin-bottom: 5px;
+            color: #f8fafc;
+        }
+
+        .skill-blocks {
+            height: 4px;
+            width: 100%;
+            background: #334155;
+            /* Slate 700 */
+        }
+
+        .skill-level {
+            height: 4px;
+            background: #10b981;
+        }
+
+        /* Languages */
+        .lang-item {
+            margin-bottom: 6px;
+            font-size: 8.5pt;
+            color: #cbd5e1;
+        }
+
+        /* Main Content - Ultra Clean */
         .main-content {
             width: 68%;
-            padding: 60px 45px;
+            padding: 50px 45px;
             vertical-align: top;
             background-color: #ffffff;
         }
 
-        /* Typography & Header */
-        .name-header {
-            text-align: center;
-            margin-bottom: 40px;
+        .header {
+            margin-bottom: 50px;
+            border-bottom: 1px solid #e2e8f0;
+            padding-bottom: 30px;
         }
-        .name-header h1 {
-            font-size: 26px;
+
+        .header h1 {
+            font-size: 32pt;
+            color: #0f172a;
             text-transform: uppercase;
-            letter-spacing: 3px;
+            letter-spacing: -1px;
+            font-weight: bold;
+            line-height: 0.9;
+        }
+
+        .header h1 .accent {
+            color: #10b981;
+        }
+
+        .header .job-title {
+            font-size: 14pt;
+            color: #64748b;
+            /* Slate 500 */
+            text-transform: uppercase;
+            letter-spacing: 5px;
+            margin-top: 10px;
             font-weight: 300;
-            margin-bottom: 10px;
-        }
-        .job-title {
-            font-size: 13px;
-            color: #0fbcf9; /* Accent bleu cyan */
-            font-weight: 600;
-            text-transform: uppercase;
-            letter-spacing: 2px;
         }
 
-        /* Section Titles */
-        .side-title {
-            font-size: 12px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #808e9b;
-            margin-bottom: 20px;
-            margin-top: 40px;
-            border-bottom: 1px solid #485460;
-            padding-bottom: 5px;
-        }
-        .main-title {
-            font-size: 16px;
-            text-transform: uppercase;
-            letter-spacing: 2px;
-            color: #1e272e;
-            margin-bottom: 30px;
-            font-weight: 700;
-            border-left: 3px solid #0fbcf9;
-            padding-left: 15px;
-        }
-
-        /* Contact & Skills */
-        .contact-list {
-            list-style: none;
-            font-size: 11px;
-            color: #d2dae2;
-        }
-        .contact-item {
-            margin-bottom: 12px;
-            display: block;
-        }
-        .skill-row {
-            margin-bottom: 15px;
-        }
-        .skill-label {
-            font-size: 11px;
-            display: block;
-            margin-bottom: 5px;
-            color: #efefef;
-        }
-        .dots {
-            font-size: 0;
-        }
-        .dot {
-            display: inline-block;
-            width: 8px;
-            height: 8px;
-            border-radius: 50%;
-            background-color: #0fbcf9;
-            margin-right: 6px;
-        }
-        .dot.empty {
-            background-color: #485460;
-        }
-
-        /* Timeline Entries */
-        .entry {
-            margin-bottom: 35px;
+        .main-section {
+            margin-bottom: 50px;
             position: relative;
         }
-        .entry-header {
-            margin-bottom: 8px;
+
+        .section-separator {
+            height: 1px;
+            background: #f1f5f9;
+            margin-bottom: 40px;
+            border: none;
         }
-        .entry-title {
-            font-size: 15px;
-            font-weight: 700;
-            color: #1e272e;
+
+        .section-header {
+            width: 100%;
+            margin-bottom: 30px;
+            padding: 8px 12px;
+            background: #f8fafc;
+            border-left: 3px solid #10b981;
         }
-        .entry-date {
-            float: right;
-            font-size: 11px;
-            font-weight: 600;
-            color: #0fbcf9;
-            background: #f1f2f6;
-            padding: 3px 10px;
-            border-radius: 20px;
+
+        .section-num {
+            font-size: 9pt;
+            color: #10b981;
+            font-weight: bold;
+            margin-right: 10px;
         }
-        .entry-org {
-            font-size: 13px;
-            color: #0fbcf9;
-            font-weight: 600;
-            margin-bottom: 8px;
+
+        .section-title {
+            font-size: 14pt;
+            color: #0f172a;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            font-weight: bold;
         }
-        .entry-content {
-            font-size: 12px;
-            color: #485460;
+
+        /* Experience & Education */
+        .entry-card {
+            margin-bottom: 25px;
+        }
+
+        .entry-table {
+            width: 100%;
+        }
+
+        .entry-role {
+            font-size: 11pt;
+            font-weight: bold;
+            color: #0f172a;
+        }
+
+        .entry-comp {
+            font-size: 10pt;
+            color: #10b981;
+            font-weight: bold;
+            margin-top: 2px;
+        }
+
+        .entry-time {
+            font-size: 8.5pt;
+            color: #94a3b8;
+            /* Slate 400 */
+            text-align: right;
+            vertical-align: top;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .entry-desc {
+            font-size: 9.5pt;
+            color: #475569;
+            /* Slate 600 */
             text-align: justify;
+            margin-top: 8px;
+            border-left: 2px solid #f1f5f9;
+            padding-left: 15px;
+            word-wrap: break-word;
+            overflow-wrap: break-word;
+            overflow: hidden;
+            max-width: 100%;
         }
 
-        /* Languages */
-        .lang-pill {
-            display: inline-block;
-            padding: 4px 12px;
-            background: #34495e;
-            border-radius: 4px;
-            font-size: 10px;
-            margin-right: 5px;
-            margin-bottom: 8px;
-            color: #ffffff;
-        }
-
-        .clearfix::after {
-            content: "";
-            clear: both;
-            display: table;
+        .footer {
+            margin-top: 50px;
+            font-size: 7pt;
+            color: #94a3b8;
+            text-align: center;
+            text-transform: uppercase;
+            letter-spacing: 2px;
         }
     </style>
 </head>
+
 <body>
 
     <table class="cv-table">
         <tr>
             <!-- SIDEBAR -->
             <td class="sidebar">
-                <div class="name-header">
-                    <h1>{{ cv.user.first_name }}<br><strong>{{ cv.user.last_name }}</strong></h1>
-                    <div class="job-title">{{ cv.titre_poste }}</div>
+                <div class="profile-section">
+                    {% if cv.photo %}
+                    <img src="{{ cv.photo.url }}" class="profile-photo" alt="{{ cv.user.get_full_name }}">
+                    {% endif %}
                 </div>
 
-                <div class="side-title">Contact</div>
-                <div class="contact-list">
-                    {% if cv.user.email %}<span class="contact-item">✉ {{ cv.user.email }}</span>{% endif %}
-                    {% if cv.user.telephone %}<span class="contact-item">📱 {{ cv.user.telephone }}</span>{% endif %}
-                    {% if cv.adresse %}<span class="contact-item">📍 {{ cv.adresse }}</span>{% endif %}
-                </div>
-
-                <div class="side-title">Compétences</div>
-                {% for skill in cv.skills.all %}
-                <div class="skill-row">
-                    <span class="skill-label">{{ skill.nom }}</span>
-                    <div class="dots">
-                        <!-- Design de points modernes -->
-                        <div class="dot"></div><div class="dot"></div><div class="dot"></div>
-                        <div class="dot"></div><div class="dot {% if skill.niveau < 90 %}empty{% endif %}"></div>
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Contact</div>
+                    <div class="contact-info">
+                        {% if cv.user.email %}
+                        <div class="contact-item"><span class="contact-icon">M:</span> {{ cv.user.email }}</div>
+                        {% endif %}
+                        {% if cv.user.telephone %}
+                        <div class="contact-item"><span class="contact-icon">T:</span> {{ cv.user.telephone }}</div>
+                        {% endif %}
+                        {% if cv.adresse %}
+                        <div class="contact-item"><span class="contact-icon">L:</span> {{ cv.adresse }}</div>
+                        {% endif %}
+                        {% if cv.linkedin %}
+                        <div class="contact-item"><span class="contact-icon">I:</span> LinkedIn</div>
+                        {% endif %}
                     </div>
                 </div>
-                {% endfor %}
 
-                <div class="side-title">Langues</div>
-                {% for lang in cv.languages.all %}
-                <div class="lang-pill">
-                    {{ lang.langue }} | {{ lang.niveau }}
+                {% if cv.skills.all %}
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Expertise</div>
+                    {% for skill in cv.skills.all %}
+                    <div class="skill-item">
+                        <span class="skill-name">{{ skill.nom }}</span>
+                        <div class="skill-blocks">
+                            <div class="skill-level" style="width: {{ skill.niveau }}%;"></div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
+                {% endif %}
+
+                {% if cv.languages.all %}
+                <div class="sidebar-section">
+                    <div class="sidebar-title">Langues</div>
+                    {% for lang in cv.languages.all %}
+                    <div class="lang-item">
+                        <strong>{{ lang.langue }}</strong> — {{ lang.niveau }}
+                    </div>
+                    {% endfor %}
+                </div>
+                {% endif %}
             </td>
 
             <!-- MAIN CONTENT -->
             <td class="main-content">
-                
+                <div class="header">
+                    <h1>{{ cv.user.first_name }}<br><span class="accent">{{ cv.user.last_name }}</span></h1>
+                    <div class="job-title">{{ cv.titre_poste }}</div>
+                </div>
+
+                <!-- PROFILE SUMMARY -->
+                {% if cv.description %}
+                <div class="main-section">
+                    <div class="section-header">
+                        <span class="section-num">00.</span>
+                        <span class="section-title">Profil</span>
+                    </div>
+                    <div class="entry-desc" style="border-left: none; padding-left: 0; font-style: italic;">
+                        {{ cv.description|truncatechars:400 }}
+                    </div>
+                </div>
+                <div class="section-separator" style="margin-top: -10px;"></div>
+                {% endif %}
+
                 <!-- EXPERIENCES -->
                 {% if cv.experiences.all %}
-                <div class="main-title">Expériences Professionnelles</div>
-                {% for exp in cv.experiences.all %}
-                <div class="entry">
-                    <div class="entry-header clearfix">
-                        <span class="entry-date">{{ exp.date_debut|date:"Y" }} — {% if exp.date_fin %}{{ exp.date_fin|date:"Y" }}{% else %}Présent{% endif %}</span>
-                        <div class="entry-title">{{ exp.poste }}</div>
+                <div class="main-section">
+                    <div class="section-header">
+                        <span class="section-num">01.</span>
+                        <span class="section-title">Expériences</span>
                     </div>
-                    <div class="entry-org">{{ exp.entreprise }}</div>
-                    <div class="entry-content">{{ exp.description|linebreaks }}</div>
+                    {% for exp in cv.experiences.all %}
+                    <div class="entry-card">
+                        <table class="entry-table">
+                            <tr>
+                                <td>
+                                    <div class="entry-role">{{ exp.poste }}</div>
+                                    <div class="entry-comp">{{ exp.entreprise }}</div>
+                                </td>
+                                <td class="entry-time">{{ exp.date_debut|date:"m/Y" }} — {% if exp.date_fin %}{{
+                                    exp.date_fin|date:"m/Y" }}{% else %}NOW{% endif %}</td>
+                            </tr>
+                        </table>
+                        <div class="entry-desc">{{ exp.description|linebreaksbr }}</div>
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
                 {% endif %}
 
                 <!-- EDUCATION -->
                 {% if cv.educations.all %}
-                <div style="margin-top: 50px;" class="main-title">Cursus Académique</div>
-                {% for edu in cv.educations.all %}
-                <div class="entry">
-                    <div class="entry-header clearfix">
-                        <span class="entry-date">{{ edu.annee }}</span>
-                        <div class="entry-title">{{ edu.diplome }}</div>
+                <div class="section-separator"></div>
+                <div class="main-section">
+                    <div class="section-header">
+                        <span class="section-num">02.</span>
+                        <span class="section-title">Formation</span>
                     </div>
-                    <div class="entry-org">{{ edu.etablissement }}</div>
-                    {% if edu.mention %}
-                    <div class="entry-content">Spécialisation : {{ edu.mention }}</div>
-                    {% endif %}
+                    {% for edu in cv.educations.all %}
+                    <div class="entry-card">
+                        <table class="entry-table">
+                            <tr>
+                                <td>
+                                    <div class="entry-role">{{ edu.diplome }}</div>
+                                    <div class="entry-comp">{{ edu.etablissement }}</div>
+                                </td>
+                                <td class="entry-time">{{ edu.annee }}</td>
+                            </tr>
+                        </table>
+                        {% if edu.mention %}
+                        <div class="entry-desc">{{ edu.mention }}</div>
+                        {% endif %}
+                    </div>
+                    {% endfor %}
                 </div>
-                {% endfor %}
                 {% endif %}
-
             </td>
         </tr>
     </table>
 
 </body>
+
 </html>
