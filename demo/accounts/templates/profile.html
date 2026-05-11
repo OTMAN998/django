@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load crispy_forms_tags %}
+
+{% block title %}Mon Profil - CV Generator Pro{% endblock %}
+
+{% block content %}
+<div class="row justify-content-center mt-5">
+    <div class="col-md-8 col-lg-6">
+        <div class="glass-card">
+            <h2 class="mb-4">Mon Profil</h2>
+            <form method="post" id="profileForm">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_first_name" class="form-label">Prénom</label>
+                    {{ form.first_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_last_name" class="form-label">Nom</label>
+                    {{ form.last_name }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_telephone" class="form-label">Téléphone</label>
+                    {{ form.telephone }}
+                </div>
+                <div class="mb-3">
+                    <label for="id_date_naissance" class="form-label">Date de naissance</label>
+                    {{ form.date_naissance }}
+                </div>
+
+                <div class="d-flex flex-wrap gap-2 mt-3">
+                    <button type="button" id="editProfileBtn" class="btn btn-outline-primary">Modifier le profil</button>
+                    <button type="button" id="resetProfileBtn" class="btn btn-outline-secondary d-none">Réinitialiser</button>
+                    <button type="submit" id="saveProfileBtn" class="btn btn-primary d-none">Sauvegarder</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    const editButton = document.getElementById('editProfileBtn');
+    const resetButton = document.getElementById('resetProfileBtn');
+    const saveButton = document.getElementById('saveProfileBtn');
+    const form = document.getElementById('profileForm');
+    const inputs = form.querySelectorAll('input:not([type=hidden])');
+
+    function setInputsDisabled(disabled) {
+        inputs.forEach(input => {
+            if (input.id !== 'id_username' && input.type !== 'submit' && input.type !== 'button') {
+                input.disabled = disabled;
+            }
+        });
+    }
+
+    editButton.addEventListener('click', () => {
+        setInputsDisabled(false);
+        editButton.classList.add('d-none');
+        resetButton.classList.remove('d-none');
+        saveButton.classList.remove('d-none');
+    });
+
+    resetButton.addEventListener('click', () => {
+        inputs.forEach(input => {
+            if (input.type !== 'hidden' && input.type !== 'submit' && input.type !== 'button') {
+                input.value = '';
+            }
+        });
+    });
+</script>
+{% endblock %}

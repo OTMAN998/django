@@ -15,6 +15,39 @@ class CustomUserCreationForm(UserCreationForm):
             raise forms.ValidationError("An account with this email address already exists.")
         return email
 
+class ProfileForm(forms.ModelForm):
+    class Meta:
+        model = User
+        fields = ['first_name', 'last_name', 'telephone', 'date_naissance']
+        labels = {
+            'first_name': 'Prénom',
+            'last_name': 'Nom',
+            'telephone': 'Téléphone',
+            'date_naissance': 'Date de naissance',
+        }
+        widgets = {
+            'first_name': forms.TextInput(attrs={
+                'placeholder': 'Prénom',
+                'class': 'form-control',
+                'disabled': 'disabled',
+            }),
+            'last_name': forms.TextInput(attrs={
+                'placeholder': 'Nom',
+                'class': 'form-control',
+                'disabled': 'disabled',
+            }),
+            'telephone': forms.TextInput(attrs={
+                'placeholder': 'Téléphone',
+                'class': 'form-control',
+                'disabled': 'disabled',
+            }),
+            'date_naissance': forms.DateInput(attrs={
+                'type': 'date',
+                'class': 'form-control',
+                'disabled': 'disabled',
+            }),
+        }
+
 from django.contrib.auth.forms import PasswordResetForm
 
 class CustomPasswordResetForm(PasswordResetForm):

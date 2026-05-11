@@ -9,4 +9,5 @@ urlpatterns = [
     path('', include("django.contrib.auth.urls")),
     path('register/', views.register, name='register'),
     path('activate/<str:token>/', views.activate, name='activate'),
+    path('profile/', views.profile, name='profile'),
 ]

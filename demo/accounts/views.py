@@ -1,11 +1,12 @@
 from django.shortcuts import render, redirect
 from django.contrib.auth import login as auth_login
-from .forms import CustomUserCreationForm
+from .forms import CustomUserCreationForm, ProfileForm
 from django.contrib.sites.shortcuts import get_current_site
 from django.template.loader import render_to_string
 from django.core.mail import EmailMessage
 from django.contrib.auth import get_user_model
 from django.core import signing
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     return render(request, "home.html")
@@ -59,3 +60,14 @@ def activate(request, token):
             
     except (signing.SignatureExpired, signing.BadSignature, KeyError):
         return render(request, 'registration/activation_invalid.html')
+
+@login_required
+def profile(request):
+    if request.method == 'POST':
+        form = ProfileForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            return redirect('profile')
+    else:
+        form = ProfileForm(instance=request.user)
+    return render(request, 'profile.html', {'form': form})
